@@ -6,7 +6,7 @@
   "scripts": {
     "test": "karma start --single-run",
     "test-watch": "karma start",
-    "prepare-build": "npm run lint && rimraf dist/",
+    "prepare-build": "rimraf dist/",
     "prebuild": "npm run prepare-build",
     "build": "jsx -x jsx ./src ./dist & jsx ./src ./dist && webpack --stats --config webpack.config.umd.prod.js && webpack --stats --config webpack.config.umd.dev.js",
     "lint": "eslint src --ext .jsx,.js",
