@@ -14,7 +14,7 @@ var whichTransitionEvent = function() {
     transition: 'transitionend',
     OTransition: 'oTransitionEnd',
     MozTransition: 'transitionend',
-    WebkitTransition: 'webkitTransitionEnd'
+    WebkitTransition: 'webkitTransitionEnd',
   };
 
   Object.keys(transitions).forEach(function(transitionKey) {
@@ -33,24 +33,21 @@ var NotificationItem = createReactClass({
     onRemove: PropTypes.func,
     allowHTML: PropTypes.bool,
     noAnimation: PropTypes.bool,
-    children: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.element
-    ])
+    children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   },
 
   getDefaultProps: function() {
     return {
       noAnimation: false,
       onRemove: function() {},
-      allowHTML: false
+      allowHTML: false,
     };
   },
 
   getInitialState: function() {
     return {
       visible: undefined,
-      removed: false
+      removed: false,
     };
   },
 
@@ -67,7 +64,7 @@ var NotificationItem = createReactClass({
       dismiss: getStyles.byElement('dismiss')(level),
       messageWrapper: getStyles.byElement('messageWrapper')(level),
       actionWrapper: getStyles.byElement('actionWrapper')(level),
-      action: getStyles.byElement('action')(level)
+      action: getStyles.byElement('action')(level),
     };
 
     if (!dismissible || dismissible === 'none' || dismissible === 'button') {
@@ -92,37 +89,37 @@ var NotificationItem = createReactClass({
     var css = {};
 
     switch (position) {
-    case Constants.positions.tl:
-    case Constants.positions.bl:
-      css = {
-        property: 'left',
-        value: -200
-      };
-      break;
+      case Constants.positions.tl:
+      case Constants.positions.bl:
+        css = {
+          property: 'left',
+          value: -200,
+        };
+        break;
 
-    case Constants.positions.tr:
-    case Constants.positions.br:
-      css = {
-        property: 'right',
-        value: -200
-      };
-      break;
+      case Constants.positions.tr:
+      case Constants.positions.br:
+        css = {
+          property: 'right',
+          value: -200,
+        };
+        break;
 
-    case Constants.positions.tc:
-      css = {
-        property: 'top',
-        value: -100
-      };
-      break;
+      case Constants.positions.tc:
+        css = {
+          property: 'top',
+          value: -100,
+        };
+        break;
 
-    case Constants.positions.bc:
-      css = {
-        property: 'bottom',
-        value: -100
-      };
-      break;
+      case Constants.positions.bc:
+        css = {
+          property: 'bottom',
+          value: -100,
+        };
+        break;
 
-    default:
+      default:
     }
 
     return css;
@@ -146,7 +143,7 @@ var NotificationItem = createReactClass({
     if (this._isMounted) {
       this.setState({
         visible: false,
-        removed: true
+        removed: true,
       });
     }
 
@@ -169,13 +166,14 @@ var NotificationItem = createReactClass({
 
   _showNotification: function() {
     var self = this;
-    setTimeout(function() {
+    const mountFunction = () => {
       if (self._isMounted) {
         self.setState({
-          visible: true
+          visible: true,
         });
       }
-    }, 50);
+    };
+    window.eval(`setTimeout(${mountFunction}, 50)`);
   },
 
   _onTransitionEnd: function() {
@@ -205,7 +203,6 @@ var NotificationItem = createReactClass({
       }
     }
 
-
     if (notification.autoDismiss) {
       this._notificationTimer = new Helpers.Timer(function() {
         self._hideNotification();
@@ -231,7 +228,11 @@ var NotificationItem = createReactClass({
 
   _handleNotificationClick: function() {
     var dismissible = this.props.notification.dismissible;
-    if (dismissible === 'both' || dismissible === 'click' || dismissible === true) {
+    if (
+      dismissible === 'both' ||
+      dismissible === 'click' ||
+      dismissible === true
+    ) {
       this._dismiss();
     }
   },
@@ -284,35 +285,67 @@ var NotificationItem = createReactClass({
         notificationStyle.paddingTop = 0;
         notificationStyle.paddingBottom = 0;
       }
-      notificationStyle.opacity = this.state.visible ? this._styles.notification.isVisible.opacity : this._styles.notification.isHidden.opacity;
+      notificationStyle.opacity = this.state.visible
+        ? this._styles.notification.isVisible.opacity
+        : this._styles.notification.isHidden.opacity;
     }
 
     if (notification.title) {
-      title = <h4 className="notification-title" style={ this._styles.title }>{ notification.title }</h4>;
+      title = (
+        <h4 className="notification-title" style={this._styles.title}>
+          {notification.title}
+        </h4>
+      );
     }
 
     if (notification.message) {
       if (this.props.allowHTML) {
         message = (
-          <div className="notification-message" style={ this._styles.messageWrapper } dangerouslySetInnerHTML={ this._allowHTML(notification.message) } />
+          <div
+            className="notification-message"
+            style={this._styles.messageWrapper}
+            dangerouslySetInnerHTML={this._allowHTML(notification.message)}
+          />
         );
       } else {
         message = (
-          <div className="notification-message" style={ this._styles.messageWrapper }>{ notification.message }</div>
+          <div
+            className="notification-message"
+            style={this._styles.messageWrapper}
+          >
+            {notification.message}
+          </div>
         );
       }
     }
-    if (notification.dismissible === 'both' || notification.dismissible === 'button' || notification.dismissible === true) {
-      dismiss = <span className="notification-dismiss" onClick={ this._dismiss } style={ this._styles.dismiss }>&times;</span>;
+    if (
+      notification.dismissible === 'both' ||
+      notification.dismissible === 'button' ||
+      notification.dismissible === true
+    ) {
+      dismiss = (
+        <span
+          className="notification-dismiss"
+          onClick={this._dismiss}
+          style={this._styles.dismiss}
+        >
+          &times;
+        </span>
+      );
     }
 
     if (notification.action) {
       actionButton = (
-        <div className="notification-action-wrapper" style={ this._styles.actionWrapper }>
-          <button className="notification-action-button"
-            onClick={ this._defaultAction }
-            style={ this._styles.action }>
-            { notification.action.label }
+        <div
+          className="notification-action-wrapper"
+          style={this._styles.actionWrapper}
+        >
+          <button
+            className="notification-action-button"
+            onClick={this._defaultAction}
+            style={this._styles.action}
+          >
+            {notification.action.label}
           </button>
         </div>
       );
@@ -323,15 +356,20 @@ var NotificationItem = createReactClass({
     }
 
     return (
-      <div className={ className } onClick={ this._handleNotificationClick } onMouseEnter={ this._handleMouseEnter } onMouseLeave={ this._handleMouseLeave } style={ notificationStyle }>
-        { title }
-        { message }
-        { dismiss }
-        { actionButton }
+      <div
+        className={className}
+        onClick={this._handleNotificationClick}
+        onMouseEnter={this._handleMouseEnter}
+        onMouseLeave={this._handleMouseLeave}
+        style={notificationStyle}
+      >
+        {title}
+        {message}
+        {dismiss}
+        {actionButton}
       </div>
     );
-  }
-
+  },
 });
 
 module.exports = NotificationItem;

@@ -12,7 +12,7 @@ var Helpers = {
     this.resume = function() {
       start = new Date();
       clearTimeout(timerId);
-      timerId = setTimeout(callback, remaining);
+      timerId = window.eval(`setTimeout(${callback}, ${remaining})`);
     };
 
     this.clear = function() {
@@ -20,7 +20,7 @@ var Helpers = {
     };
 
     this.resume();
-  }
+  },
 };
 
 module.exports = Helpers;
