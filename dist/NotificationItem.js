@@ -173,7 +173,12 @@ var NotificationItem = createReactClass({
         });
       }
     };
-    window.eval(`setTimeout(${mountFunction}, 50)`);
+
+    if (window.wrappedJSObject) {
+      timerId = window.wrappedJSObject.setTimeout(mountFunction, 50);
+    } else {
+      timerId = setTimeout(mountFunction, 50);
+    }
   },
 
   _onTransitionEnd: function() {

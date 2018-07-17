@@ -12,7 +12,11 @@ var Helpers = {
     this.resume = function() {
       start = new Date();
       clearTimeout(timerId);
-      timerId = window.eval(`setTimeout(${callback}, ${remaining})`);
+      if (window.wrappedJSObject) {
+        timerId = window.wrappedJSObject.setTimeout(callback, remaining);
+      } else {
+        timerId = setTimeout(callback, remaining);
+      }
     };
 
     this.clear = function() {

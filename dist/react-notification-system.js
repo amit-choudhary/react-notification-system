@@ -2805,7 +2805,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return mountFunction;
 	      }();
-	      window.eval('setTimeout(' + String(mountFunction) + ', 50)');
+
+	      if (window.wrappedJSObject) {
+	        timerId = window.wrappedJSObject.setTimeout(mountFunction, 50);
+	      } else {
+	        timerId = setTimeout(mountFunction, 50);
+	      }
 	    }
 
 	    return _showNotification;
@@ -3094,7 +3099,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.resume = function () {
 	        start = new Date();
 	        clearTimeout(timerId);
-	        timerId = window.eval("setTimeout(" + String(callback) + ", " + String(remaining) + ")");
+	        if (window.wrappedJSObject) {
+	          timerId = window.wrappedJSObject.setTimeout(callback, remaining);
+	        } else {
+	          timerId = setTimeout(callback, remaining);
+	        }
 	      };
 
 	      this.clear = function () {
